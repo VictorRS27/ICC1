@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *read_line( char *line) {
+char *read_line() {
     int i=0;
+    char *line= malloc(sizeof(char));
     do
     {
         line[i]= getchar();
@@ -17,6 +18,7 @@ char *read_line( char *line) {
         i++;
     }while (line[i-1]!='\0');
     fflush(stdin);
+    //printf("%i", i);
     return line;
 }
 
@@ -27,12 +29,11 @@ int main(int argc, char const *argv[])
     scanf(" %i%*[\n]s", &lines);
     char **line = malloc(lines * sizeof(char *));
 	for (i=0; i<lines; i++){
-		line[i] = malloc(sizeof(char));
-        line[i] = read_line(line[i]);
+        line[i] = read_line();
     }
 
     scanf(" %i", &valids);
-    int valid[valids];
+    int *valid = calloc(valids, sizeof(int));
     for ( i = 0; i < valids; i++)
     {
         scanf(" %i", &valid[i]);
