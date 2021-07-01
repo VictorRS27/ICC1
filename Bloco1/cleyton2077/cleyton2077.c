@@ -4,7 +4,7 @@
 #define size_fita 512
 int main()
 {
-    int tape[size_fita] = {}, operacao = 0, i = 0, pointer = 0;
+    int tape[size_fita] = {0}, operacao = 0, i = 0, pointer = 0;
 
     //leitura da fita
     for (i = 0; i < size_fita; i++)
