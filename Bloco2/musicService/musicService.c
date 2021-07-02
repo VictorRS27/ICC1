@@ -26,11 +26,11 @@ char *read_line( ) {
         }else
         {
             //printf("%c", line[i]);
-            line = realloc(line, (i+1) * sizeof(char));
+            line = realloc(line, (i+2) * sizeof(char));
         }
         i++;
     }while (line[i-1]!='\0');
-    fflush(stdin);
+    //fflush(stdin);
     return line;
 }
 
@@ -38,11 +38,11 @@ int main(int argc, char const *argv[])
 {
     Playlist list;
     list.total=0;
-    int operator=0, i=0, atual=0, teste;
-    teste=list.total;
+    int operator=0, i=0, atual=0, teste=0;
+
     list.nome=read_line();
     
-    list.musicas = NULL;
+    list.musicas = calloc(1, sizeof(Musica));
 
     do
     {
@@ -52,7 +52,8 @@ int main(int argc, char const *argv[])
         {
         case 1:
             getchar();
-            list.musicas = realloc(list.musicas, (list.total+1) * sizeof(Musica));
+            teste=list.total+1;
+            list.musicas = realloc(list.musicas, (teste) * sizeof(Musica));
             //printf("ler nome:");
             //printf("%s", read_line());
             list.musicas[list.total].nome=read_line();
@@ -61,13 +62,13 @@ int main(int argc, char const *argv[])
             //printf("ler numero");
             scanf(" %i", &list.musicas[list.total].duracao);
             //printf("pos");            
-            printf("Musica %s de %s adicionada com sucesso\n", list.musicas[list.total].nome, list.musicas[list.total].artista);
+            printf("Musica %s de %s adicionada com sucesso.\n", list.musicas[list.total].nome, list.musicas[list.total].artista);
             list.total++;
             break;
 
         case 2:
-            printf("---- Playlist : %s ----\n", list.nome);
-            printf("Total de musicas : %i\n\n", list.total);
+            printf("---- Playlist: %s ----\n", list.nome);
+            printf("Total de musicas: %i\n\n", list.total);
             for ( i = 0; i < list.total; i++)
             {
                 if (i==atual)

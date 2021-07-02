@@ -2,18 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 char *read_line() {
     int i=0;
     char *line= malloc(sizeof(char));
     do
     {
-        line[i]= getchar();
+        //fgets(line, 1, stdin );
+        line[i]=getchar();
         if (line[i]=='\n')
         {
             line[i]='\0';
         }else
         {
-            line = realloc(line, (i+1) * sizeof(char));
+            //printf("%c", line[i]); 
+            line = realloc(line, (i+2) * sizeof(char));
         }
         i++;
     }while (line[i-1]!='\0');
