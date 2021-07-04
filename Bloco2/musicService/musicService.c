@@ -20,7 +20,7 @@ char *read_line( ) {
     do
     {
         line[i]= getchar();
-        if (line[i]=='\n')
+        if (line[i]=='\n' || line[i]=='\r')
         {
             line[i]='\0';
         }else
@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
 {
     Playlist list;
     list.total=0;
-    int operator=0, i=0, atual=0, teste=0;
+    int operator=0, i=0, atual=0;
 
     list.nome=read_line();
     
@@ -52,8 +52,7 @@ int main(int argc, char const *argv[])
         {
         case 1:
             getchar();
-            teste=list.total+1;
-            list.musicas = realloc(list.musicas, (teste) * sizeof(Musica));
+            list.musicas = realloc(list.musicas, (list.total+1) * sizeof(Musica));
             //printf("ler nome:");
             //printf("%s", read_line());
             list.musicas[list.total].nome=read_line();
