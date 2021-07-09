@@ -51,18 +51,20 @@ int main(int argc, char const *argv[])
         switch (operator)
         {
         case 1:
-            getchar();
-            list.musicas = realloc(list.musicas, (list.total+1) * sizeof(Musica));
-            //printf("ler nome:");
-            //printf("%s", read_line());
-            list.musicas[list.total].nome=read_line();
-            //printf("ler artista");
-            list.musicas[list.total].artista=read_line();
-            //printf("ler numero");
-            scanf(" %i", &list.musicas[list.total].duracao);
-            //printf("pos");            
-            printf("Musica %s de %s adicionada com sucesso.\n", list.musicas[list.total].nome, list.musicas[list.total].artista);
-            list.total++;
+            if (list.total<15)
+            {
+                getchar();
+                list.musicas = realloc(list.musicas, (list.total+1) * sizeof(Musica));            
+                list.musicas[list.total].nome=read_line();
+                list.musicas[list.total].artista=read_line();
+                scanf(" %i", &list.musicas[list.total].duracao);
+                printf("Musica %s de %s adicionada com sucesso.\n", list.musicas[list.total].nome, list.musicas[list.total].artista);
+                list.total++;
+            }else
+            {
+                printf("Playlist cheia!\n");
+            }
+            
             break;
 
         case 2:
