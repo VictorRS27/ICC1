@@ -18,21 +18,21 @@ int neighborNeummanCheck(int currentLine, int currentColumn, BOARD_SIZE boardDat
         {
             if (currentLine + i < 0)
             {
-                if (copy[currentLine + i + boardData.lines][currentColumn] == 'X')
+                if (copy[currentLine + i + boardData.lines][currentColumn] == 'x')
                 {
                     totalNeighbors++;//printf("extrapolou pra cima e achou 1\n");
                 }
             }
             else if (currentLine + i >= boardData.lines)
             {
-                if (copy[currentLine + i - boardData.lines][currentColumn] == 'X')
+                if (copy[currentLine + i - boardData.lines][currentColumn] == 'x')
                 {
                     totalNeighbors++;//printf("extrapolou pra baixo e achou 1\n");
                 }
             }
             else
             {
-                if (copy[currentLine + i][currentColumn] == 'X')
+                if (copy[currentLine + i][currentColumn] == 'x')
                 {
                     totalNeighbors++;//printf("vertical aleatoria achou\n");
                 }
@@ -40,21 +40,21 @@ int neighborNeummanCheck(int currentLine, int currentColumn, BOARD_SIZE boardDat
 
             if (currentColumn + i < 0)
             {
-                if (copy[currentLine][currentColumn + i + boardData.columns] == 'X')
+                if (copy[currentLine][currentColumn + i + boardData.columns] == 'x')
                 {
                     totalNeighbors++;//printf("extrapolou pra esquerda e achou 1\n");
                 }
             }
             else if (currentColumn + i >= boardData.columns)
             {
-                if (copy[currentLine][currentColumn + i - boardData.columns] == 'X')
+                if (copy[currentLine][currentColumn + i - boardData.columns] == 'x')
                 {
                     totalNeighbors++;//printf("extrapolou pra direita e achou 1\n");
                 }
             }
             else
             {
-                if (copy[currentLine][currentColumn + i] == 'X')
+                if (copy[currentLine][currentColumn + i] == 'x')
                 {
                     totalNeighbors++;//printf("horizontal aleatorio achou\n");
                 }
@@ -69,84 +69,92 @@ int neighborNeummanCheck(int currentLine, int currentColumn, BOARD_SIZE boardDat
 int neighborMooreCheck(int currentLine, int currentColumn, BOARD_SIZE boardData, char **copy)
 {
     int i, j, totalNeighbors = 0;
+    //printf("moore\n");
     for (i = -1; i < 2; i++)
     {
         for (j = -1; j < 2; j++)
         {
             if (i != 0 || j != 0)
             {
-                if (currentLine == 0)
+                if (currentLine + i < 0)
                 {
-                    if (currentColumn == 0)
+                    if (currentColumn + j < 0)
                     {
-                        if (copy[i + boardData.lines][j + boardData.columns] == 'X')
+                        if (copy[i + boardData.lines][j + boardData.columns] == 'x')
                         {
-                            totalNeighbors++;
+                            totalNeighbors++;//printf("extrapolou esquerda e cima e achou\n");
                         }
                     }
-                    else if (currentColumn == boardData.columns)
+                    else if (currentColumn + j >= boardData.columns)
                     {
-                        if (copy[i + boardData.lines][currentLine + j - boardData.columns] == 'X')
+                        if (copy[boardData.lines-1][0] == 'x')
                         {
-                            totalNeighbors++;
+                            totalNeighbors++;//printf("extrapolou direita e cima e achou\n");
+                        }
+                    }else
+                    {
+                        if (copy[i + boardData.lines][currentColumn + j] == 'x')
+                        {
+                            totalNeighbors++;//printf("extrapolou cima e achou\n");
                         }
                     }
+                    
                 }
-                else if (currentLine == boardData.lines)
+                else if (currentLine + i >= boardData.lines)
                 {
-                    if (currentColumn == 0)
+                    if (currentColumn + j < 0)
                     {
-                        if (copy[currentLine + i - boardData.lines][j + boardData.columns] == 'X')
+                        if (copy[currentLine + i - boardData.lines][j + boardData.columns] == 'x')
                         {
-                            totalNeighbors++;
+                            totalNeighbors++;//printf("extrapolou esquerda e baixo e achou\n");
                         }
                     }
-                    else if (currentColumn == boardData.columns)
+                    else if (currentColumn + j >= boardData.columns)
                     {
-                        if (copy[currentLine + i - boardData.lines][currentLine + j - boardData.columns] == 'X')
+                        if (copy[0][0] == 'x')
                         {
-                            totalNeighbors++;
+                            totalNeighbors++;//printf("extrapolou direita e baixo e achou\n");
+                        }
+                    }else
+                    {
+                        if (copy[currentLine + i - boardData.lines][currentColumn + j] == 'x')
+                        {
+                            totalNeighbors++;//printf("extrapolou baixo e achou\n");
                         }
                     }
+                    
                 }
-                else if (currentColumn == 0)
+                else if (currentColumn +j < 0)
                 {
-                    if (copy[currentLine + i][j + boardData.columns] == 'X')
+                    if (copy[currentLine + i][currentColumn + j + boardData.columns] == 'x')
                     {
-                        totalNeighbors++;
+                        totalNeighbors++;//printf("extrapolou esquerda e achou\n");
                     }
                 }
-                else if (currentColumn == boardData.columns)
+                else if (currentColumn + j >= boardData.columns)
                 {
-                    if (copy[currentLine + i][currentColumn + j - boardData.columns] == 'X')
+                    if (copy[currentLine + i][currentColumn + j - boardData.columns] == 'x')
                     {
-                        totalNeighbors++;
-                    }
-                }
-                else if (currentLine == boardData.lines)
-                {
-                    if (copy[currentLine + i - boardData.lines][currentColumn + j] == 'X')
-                    {
-                        totalNeighbors++;
-                    }
-                }
-                else if (currentLine == 0)
-                {
-                    if (copy[i + boardData.lines][currentColumn + j] == 'X')
-                    {
-                        totalNeighbors++;
+                        totalNeighbors++;//printf("extrapolou direita e achou\n");
                     }
                 }
                 else
                 {
-                    if (copy[currentLine + i][currentColumn + j] == 'X')
+                    if (copy[currentLine + i][currentColumn + j] == 'x')
                     {
-                        totalNeighbors++;
+                        totalNeighbors++;//printf("nao extrapolou achou\n");
                     }
                 }
             }
+            //printf("%i %i\n", i, j);
         }
     }
+    /*if (currentLine + 1 == boardData.lines && currentColumn + 1 == boardData.columns)
+    {
+        printf("total de vizinhos: %i\n", totalNeighbors);
+    }*/
+    
+    //printf("total de vizinhos: %i\n", totalNeighbors);
     return totalNeighbors;
 }
 
@@ -171,9 +179,7 @@ void changeGeneration(char **board, BOARD_SIZE boardData, char method)
     {
         for (j = 0; j < boardData.columns; j++)
         {
-            if (copy[i][j] == 'X')
-            {
-                if (method == 'N')
+            if (method == 'N')
                 {
                     totalNeighbors = neighborNeummanCheck(i, j, boardData, copy);
                 }
@@ -181,35 +187,40 @@ void changeGeneration(char **board, BOARD_SIZE boardData, char method)
                 {
                     totalNeighbors = neighborMooreCheck(i, j, boardData, copy);
                 }
-
+            if (copy[i][j] == 'x')
+            {
+                
                 if (totalNeighbors < 2 || totalNeighbors > 3)
                 {
                     board[i][j] = '.';
                 }
-            }
-            if (copy[i][j] == '.')
+            }else if (copy[i][j] == '.')
             {
-                if (method == 'N')
-                {
-                    totalNeighbors = neighborNeummanCheck(i, j, boardData, copy);
-                }
-                else
-                {
-                    totalNeighbors = neighborMooreCheck(i, j, boardData, copy);
-                }
+                
                 if (totalNeighbors == 3)
                 {
-                    board[i][j] = 'X';
+                    board[i][j] = 'x';
                 }
             }
-            //printf("fim de uma verificação de um %c\n", copy[i][j]);
+            //printf("fim de uma verificacao de um %c\n", copy[i][j]);
         }
     }
-    //printf("\n");
+    //printf("\nFim de uma Geracao\n\n");
+    /*printf("\n\n");
+    for (i = 0; i < boardData.lines; i++)
+    {
+        for (j = 0; j < boardData.columns; j++)
+        {
+            printf("%c", board[i][j]);
+        }
+        printf("\n");
+    }*/
+    
 
-    for (i = 0; i < boardData.columns; i++)
+    for (i = 0; i < boardData.lines; i++)
         free(copy[i]);
     free(copy);
+    //printf("\nFim de uma Geracao pos free\n\n");
 }
 
 int main(int argc, char const *argv[])
@@ -229,6 +240,12 @@ int main(int argc, char const *argv[])
 
     scanf(" %d %c", &generations, &neighborhood);
 
+    if ((neighborhood != 'N' && neighborhood!='M') || generations < 0 || boardData.columns <= 0 || boardData.lines <= 0)
+        {
+            printf("Dados de entrada apresentam erro.\n");
+            exit(0);
+        }
+
     for (i = 0; i < boardData.lines; i++)
     {
         for (j = 0; j < boardData.columns; j++)
@@ -237,14 +254,6 @@ int main(int argc, char const *argv[])
         }
     }
 
-    /*for (i = 0; i < boardData.lines; i++)
-    {
-        for (j = 0; j < boardData.columns; j++)
-        {
-            printf("%c", board[i][j]);
-        }
-        printf("\n");
-    }*/
 
     for (i = 0; i < generations; i++)
     {
@@ -260,7 +269,7 @@ int main(int argc, char const *argv[])
         printf("\n");
     }
 
-    for (i = 0; i < boardData.columns; i++)
+    for (i = 0; i < boardData.lines; i++)
         free(board[i]);
     free(board);
     return 0;
