@@ -7,18 +7,6 @@
  * N°USP: 12566140
  * 
  * Atividade de gerenciamento de playlists conforme imagem contida na pasta
- * 
- * As contagem feitas pela função apontam que em operações sozinhos, os comando 5 e 6 funcionam bem
- * mas por algum motivo, quando juntos, não funcionam mais, apontando um número inferior;
- * 
- * Entendo que para salvar é preciso remover os '\0's ao fim e os incluir quando um arquivo for carregado
- * Meu programa faz isso, a principio os valores de tamanho de textos eram contabilizados juntos com o \0, 
- * mas somente quando desconsiderei o \0 que os casos 3, 5 e 8 funcionaram
- * 
- * Em alguns casos o caso 7 deu certo, não entendi o motivo e ao tentar corrigir os erros nítidos nesses estágios
- * do programa, o caso voltava a estar errado;
- * 
- * Não tenho ideia do que pode estar de errado, se puder encontrar meu erro, por favor entre em contato @VkiFrodo telegram
 */
 
 //structs com os dados das tabelas
@@ -63,10 +51,12 @@ char *read_line( int *size) {
             line[i]='\0';
         }else
         {
+            //printf("%c", line[i]);
             line = realloc(line, (i+2) * sizeof(char));
         }
         i++;
     }while (line[i-1]!='\0');
+    //fflush(stdin);
     *size = i;
     return line;
 }
@@ -127,35 +117,31 @@ int main(int argc, char const *argv[])
             atual--;
             break;
 
-        case 5://salva playlist em arquivo binário -> \0 removido e tamanho realocado
+        case 5://salva playlist em arquivo binário
             getchar();
             fileName = read_line(&tmp);
-            FILE *escrita = fopen( fileName,"wb");            
-            list.nomeSize--;
+            FILE *escrita = fopen( fileName,"wb");
             fwrite(&list.nomeSize, sizeof(int), 1, escrita);
-            
-            
+            list.nome = realloc(list.nome, (list.nomeSize-1) * sizeof(char));
             fwrite(list.nome, sizeof(char), list.nomeSize, escrita);
             fwrite(&list.total, sizeof(int), 1, escrita);
-
+            list.musicas = realloc(list.musicas, (list.total) * sizeof(Musica));
             for ( i = 0; i < list.total; i++)
             {
-                list.musicas[i].nomeSize--;
                 fwrite(&list.musicas[i].nomeSize, sizeof(int), 1, escrita); 
+                list.musicas[i].nome = realloc(list.musicas[i].nome, (list.musicas[i].nomeSize-1) * sizeof(Musica));
                 fwrite(list.musicas[i].nome, sizeof(char), list.musicas[i].nomeSize, escrita); 
-                list.musicas[i].artistSize--;
                 fwrite(&list.musicas[i].artistSize, sizeof(int), 1, escrita); 
-                
-                
+                list.musicas[i].artista = realloc(list.musicas[i].artista, (list.musicas[i].artistSize-1) * sizeof(Musica));
                 fwrite(list.musicas[i].artista, sizeof(char), list.musicas[i].artistSize, escrita);
-                fwrite(&list.musicas[i].duracao, sizeof( unsigned int), 1, escrita);
+                fwrite(&list.musicas[i].duracao, sizeof(int), 1, escrita);
             }
             fclose(escrita);
             printf("Playlist %s salva com sucesso.\n", fileName);
             binaryToNum(fileName);
             break;
 
-        case 6://carrega playlist de arquivo binário adicionando \0
+        case 6://carrega playlist em arquivo binário
             getchar();
             fileName = read_line(&tmp);
             FILE *leitura = fopen( fileName,"rb");
@@ -166,21 +152,21 @@ int main(int argc, char const *argv[])
             }else
             {
                 fread(&list.nomeSize, sizeof(int), 1, leitura);
-                list.nome = realloc(list.nome, (list.nomeSize) * sizeof(char));
-                fread(list.nome, sizeof(char), list.nomeSize, leitura);
+                list.nome = realloc(list.nome, (list.nomeSize+1) * sizeof(char));
                 list.nome[list.nomeSize]='\0';
+                fread(list.nome, sizeof(char), list.nomeSize, leitura);
                 fread(&list.total, sizeof(int), 1, leitura);
                 list.musicas = realloc(list.musicas, (list.total) * sizeof(Musica));    
                 for ( i = 0; i < list.total; i++)
                 {
                 fread(&list.musicas[i].nomeSize, sizeof(int), 1, leitura); 
-                list.musicas[i].nome = realloc(list.musicas[i].nome, (list.musicas[i].nomeSize) * sizeof(char));
-                fread(list.musicas[i].nome, sizeof(char), list.musicas[i].nomeSize, leitura); 
+                list.musicas[i].nome = realloc(list.musicas[i].nome, (list.musicas[i].nomeSize+1) * sizeof(char));
                 list.musicas[i].nome[list.musicas[i].nomeSize]='\0';                
+                fread(list.musicas[i].nome, sizeof(char), list.musicas[i].nomeSize, leitura); 
                 fread(&list.musicas[i].artistSize, sizeof(int), 1, leitura); 
-                list.musicas[i].artista = realloc(list.musicas[i].artista, (list.musicas[i].artistSize) * sizeof(char));
-                fread(list.musicas[i].artista, sizeof(char), list.musicas[i].artistSize, leitura);
+                list.musicas[i].artista = realloc(list.musicas[i].artista, list.musicas[i].artistSize * sizeof(char));
                 list.musicas[i].artista[list.musicas[i].artistSize]='\0';
+                fread(list.musicas[i].artista, sizeof(char), list.musicas[i].artistSize, leitura);
                 fread(&list.musicas[i].duracao, sizeof(int), 1, leitura);
                 }
                 fclose(leitura);
@@ -204,5 +190,6 @@ int main(int argc, char const *argv[])
     }
     free(list.musicas);
     free(list.nome);
+    //printf("fim");
     return 0;
 }
